@@ -1,8 +1,9 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rishaan Daily Needs - Mini Demo Fixed</title>
+<title>Rishaan Daily Needs - Mini Demo</title>
 <style>
 body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f2f2f2; }
 header { background: linear-gradient(90deg, #27ae60, #2ecc71); color:white; padding:30px 20px; text-align:center; position:relative; }
@@ -23,11 +24,12 @@ header p { margin:8px 0 0 0; font-size:16px; color:#f1f1f1; }
 .product-details { flex:1; }
 .product-details h4 { margin:0 0 5px 0; font-size:15px; font-weight:bold; }
 .product-details p.desc { margin:0 0 5px 0; font-size:13px; color:#555; }
-.product-details input.price { font-weight:bold; color:#e74c3c; width:100%; padding:4px; margin-bottom:5px; }
-.quantity-container { display:flex; align-items:center; margin-top:5px; }
+.price-container { display:flex; align-items:center; gap:5px; margin-bottom:5px; }
+.product-details input.price { font-weight:bold; color:#e74c3c; width:80px; padding:4px; }
+.price-label { font-size:14px; color:#e74c3c; font-weight:bold; }
+.quantity-container { display:flex; align-items:center; margin-top:5px; gap:5px; }
 .quantity { width:80px; font-size:14px; padding:5px; }
-.quantity-container span { margin-left:5px; font-weight:bold; color:#e74c3c; }
-.unit-select { margin-top:5px; padding:4px; width:100%; }
+.unit-select { padding:4px; width:100px; }
 .show-more { background:#27ae60; color:white; border:none; padding:6px 10px; border-radius:5px; cursor:pointer; font-size:12px; margin-top:5px; }
 .order-btn { margin-top:15px; background:#27ae60; color:white; border:none; padding:14px; width:100%; border-radius:5px; cursor:pointer; font-size:16px; }
 .order-btn:hover { background:#2ecc71; }
@@ -40,28 +42,90 @@ header p { margin:8px 0 0 0; font-size:16px; color:#f1f1f1; }
   <h1>Rishaan Daily Needs</h1>
   <p>Fresh Quality Foods</p>
 </header>
+
 <div class="category-carousel" id="carousel"></div>
 <div class="container" id="categories"></div>
+
 <script>
 const categories = [
   {name:'Chal (Rice)', icon:'https://images.unsplash.com/photo-1601004890684-040d5da1c7ab?auto=format&fit=crop&w=60&h=60', products:[
     {name:'Basmati Rice', company:'India Gate', description:'Premium long grain rice', price:'', img:'https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=90&h=90'},
     {name:'Sona Masuri Rice', company:'LUZ', description:'Soft texture rice', price:'', img:'https://images.unsplash.com/photo-1589831234345-d1e07fa2d7b1?auto=format&fit=crop&w=90&h=90'},
-    {name:'Mini Rice', company:'LUZ', description:'Compact sample rice', price:'', img:'https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=90&h=90'},
-    {name:'Extra Rice', company:'LUZ', description:'Extra sample', price:'', img:'https://images.unsplash.com/photo-1589831234345-d1e07fa2d7b1?auto=format&fit=crop&w=90&h=90'}
+    {name:'Mini Rice', company:'LUZ', description:'Compact sample rice', price:'', img:'https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=90&h=90'}
   ]},
   {name:'Dal (Lentils)', icon:'https://images.unsplash.com/photo-1604882357360-2d2e8bda3e6f?auto=format&fit=crop&w=60&h=60', products:[
     {name:'Moong Dal', company:'Patanjali', description:'Yellow moong dal', price:'', img:'https://images.unsplash.com/photo-1604882357360-2d2e8bda3e6f?auto=format&fit=crop&w=90&h=90'},
-    {name:'Masoor Dal', company:'LUZ', description:'Red lentils', price:'', img:'https://images.unsplash.com/photo-1604882357360-2d2e8bda3e6f?auto=format&w=90&h=90'},
-    {name:'Extra Dal', company:'LUZ', description:'Extra sample', price:'', img:'https://images.unsplash.com/photo-1604882357360-2d2e8bda3e6f?auto=format&w=90&h=90'}
+    {name:'Masoor Dal', company:'LUZ', description:'Red lentils', price:'', img:'https://images.unsplash.com/photo-1604882357360-2d2e8bda3e6f?auto=format&w=90&h=90'}
   ]}
-];// Render carousel const carousel = document.getElementById('carousel'); categories.forEach((cat,i)=>{ const div = document.createElement('div'); div.className='category-icon'; div.onclick=()=>{document.getElementById('cat-'+i).scrollIntoView({behavior:'smooth'})}; const img = document.createElement('img'); img.src=cat.icon; div.appendChild(img); const span = document.createElement('span'); span.textContent=cat.name; div.appendChild(span); carousel.appendChild(div); });
+];
 
-const container = document.getElementById('categories'); categories.forEach((cat,i)=>{ const catDiv = document.createElement('div'); catDiv.className='category'; catDiv.id='cat-'+i; const h2 = document.createElement('h2'); h2.textContent=cat.name; catDiv.appendChild(h2); const showCount = 3; cat.products.forEach((prod,index)=>{ const prodDiv=document.createElement('div'); prodDiv.className='product'; if(index>=showCount){ prodDiv.style.display='none'; prodDiv.classList.add('hidden-prod'); } const img=document.createElement('img'); img.src=prod.img; prodDiv.appendChild(img); const details=document.createElement('div'); details.className='product-details'; const title=document.createElement('h4'); title.textContent=${prod.name} - ${prod.company}; const desc=document.createElement('p'); desc.className='desc'; desc.textContent=prod.description; const price=document.createElement('input'); price.type='text'; price.placeholder='Enter price (₹)'; price.className='price'; details.appendChild(title); details.appendChild(desc); details.appendChild(price); const qtyContainer=document.createElement('div'); qtyContainer.className='quantity-container'; const qty=document.createElement('input'); qty.type='number'; qty.min='0'; qty.value='0'; qty.className='quantity'; const perUnit=document.createElement('span'); perUnit.textContent='₹ per kg'; qtyContainer.appendChild(qty); qtyContainer.appendChild(perUnit); details.appendChild(qtyContainer); const unit=document.createElement('select'); unit.className='unit-select'; ['grams','kg','kilo'].forEach(u=>{ const opt=document.createElement('option'); opt.value=u; opt.textContent=u; unit.appendChild(opt); }); details.appendChild(unit); prodDiv.appendChild(details); catDiv.appendChild(prodDiv); prod.inputElement=qty; prod.unitElement=unit; prod.priceElement=price; });
+// Render carousel
+const carousel = document.getElementById('carousel');
+categories.forEach((cat,i)=>{
+  const div = document.createElement('div'); div.className='category-icon'; div.onclick=()=>{document.getElementById('cat-'+i).scrollIntoView({behavior:'smooth'})};
+  const img = document.createElement('img'); img.src=cat.icon; div.appendChild(img);
+  const span = document.createElement('span'); span.textContent=cat.name; div.appendChild(span);
+  carousel.appendChild(div);
+});
 
-if(cat.products.length>showCount){ const showMoreBtn=document.createElement('button'); showMoreBtn.className='show-more'; showMoreBtn.textContent='Show More'; showMoreBtn.onclick=()=>{ const hiddenItems=catDiv.querySelectorAll('.hidden-prod'); hiddenItems.forEach(item=>item.style.display='flex'); showMoreBtn.style.display='none'; }; catDiv.appendChild(showMoreBtn); } container.appendChild(catDiv); });
+const container = document.getElementById('categories');
+categories.forEach((cat,i)=>{
+  const catDiv = document.createElement('div'); catDiv.className='category'; catDiv.id='cat-'+i;
+  const h2 = document.createElement('h2'); h2.textContent=cat.name; catDiv.appendChild(h2);
+  const showCount = 2;
+  cat.products.forEach((prod,index)=>{
+    const prodDiv=document.createElement('div'); prodDiv.className='product';
+    if(index>=showCount){ prodDiv.style.display='none'; prodDiv.classList.add('hidden-prod'); }
+    const img=document.createElement('img'); img.src=prod.img; prodDiv.appendChild(img);
+    const details=document.createElement('div'); details.className='product-details';
+    const title=document.createElement('h4'); title.textContent=`${prod.name} - ${prod.company}`;
+    const desc=document.createElement('p'); desc.className='desc'; desc.textContent=prod.description;
+    
+    const priceContainer=document.createElement('div'); priceContainer.className='price-container';
+    const priceInput=document.createElement('input'); priceInput.type='text'; priceInput.placeholder='Enter price'; priceInput.className='price';
+    const priceLabel=document.createElement('span'); priceLabel.className='price-label'; priceLabel.textContent='₹ per kg';
+    priceContainer.appendChild(priceInput); priceContainer.appendChild(priceLabel);
+    details.appendChild(title); details.appendChild(desc); details.appendChild(priceContainer);
+    
+    const qtyContainer=document.createElement('div'); qtyContainer.className='quantity-container';
+    const qty=document.createElement('input'); qty.type='number'; qty.min='0'; qty.value='0'; qty.className='quantity';
+    const unit=document.createElement('select'); unit.className='unit-select';
+    ['grams','kg'].forEach(u=>{ const opt=document.createElement('option'); opt.value=u; opt.textContent=u; unit.appendChild(opt); });
+    qtyContainer.appendChild(qty); qtyContainer.appendChild(unit); details.appendChild(qtyContainer);
+    
+    prodDiv.appendChild(details); catDiv.appendChild(prodDiv);
+    prod.inputElement=qty; prod.unitElement=unit; prod.priceElement=priceInput;
+  });
+  
+  if(cat.products.length>showCount){
+    const showMoreBtn=document.createElement('button'); showMoreBtn.className='show-more'; showMoreBtn.textContent='Show More';
+    showMoreBtn.onclick=()=>{
+      const hiddenItems=catDiv.querySelectorAll('.hidden-prod'); hiddenItems.forEach(item=>item.style.display='flex');
+      showMoreBtn.style.display='none';
+    };
+    catDiv.appendChild(showMoreBtn);
+  }
+  container.appendChild(catDiv);
+});
 
-const orderBtn=document.createElement('button'); orderBtn.className='order-btn'; orderBtn.textContent='Order All via WhatsApp'; orderBtn.onclick=()=>{ let message='Rishaan Daily Needs Order:\n\n'; let total=0; let hasItem=false; categories.forEach(cat=>{ cat.products.forEach(prod=>{ if(prod.inputElement && prod.inputElement.value>0){ const priceNum=parseFloat(prod.priceElement.value)||0; const qtyNum=parseFloat(prod.inputElement.value)||0; const amount=priceNum*qtyNum; total+=amount; message+=${prod.name} (${prod.company})\nQuantity: ${qtyNum} ${prod.unitElement.value}\nPrice: ₹${priceNum} per ${prod.unitElement.value}\nAmount: ₹${amount}\n\n; hasItem=true; } });}); message+=Total: ₹${total}; if(!hasItem){ alert('Please select at least one item!'); return; } const waLink=https://wa.me/917557820107?text=${encodeURIComponent(message)}; window.open(waLink,'_blank'); }; document.body.appendChild(orderBtn); </script>
-
+const orderBtn=document.createElement('button'); orderBtn.className='order-btn'; orderBtn.textContent='Order All via WhatsApp';
+orderBtn.onclick=()=>{
+  let message='Rishaan Daily Needs Order:\\n\\n'; let total=0; let hasItem=false;
+  categories.forEach(cat=>{ cat.products.forEach(prod=>{
+    if(prod.inputElement && prod.inputElement.value>0){
+      const priceNum=parseFloat(prod.priceElement.value)||0;
+      const qtyNum=parseFloat(prod.inputElement.value)||0;
+      const amount=priceNum*qtyNum; total+=amount;
+      message+=`${prod.name} (${prod.company})\\nQuantity: ${qtyNum} ${prod.unitElement.value}\\nPrice: ₹${priceNum} per ${prod.unitElement.value}\\nAmount: ₹${amount}\\n\\n`;
+      hasItem=true;
+    }
+  });});
+  message+=`Total: ₹${total}`;
+  if(!hasItem){ alert('Please select at least one item!'); return; }
+  const waLink=`https://wa.me/917557820107?text=${encodeURIComponent(message)}`;
+  window.open(waLink,'_blank');
+};
+document.body.appendChild(orderBtn);
+</script>
 </body>
 </html>
