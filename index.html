@@ -1,1 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grocery Web Demo</title>
+<style>
+body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f5f5f5; }
+header { background:#27ae60; color:white; padding:20px; text-align:center; }
+.container { display:grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap:20px; padding:20px; }
+.category { background:white; border-radius:10px; padding:15px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+.category h2 { margin-top:0; color:#27ae60; font-size:18px; }
+.product { display:flex; align-items:flex-start; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:10px; }
+.product img { width:60px; height:60px; object-fit:cover; border-radius:5px; margin-right:10px; }
+.product-details { flex:1; }
+.product-details h4 { margin:0 0 5px 0; font-size:14px; }
+.product-details p { margin:0; font-size:12px; color:#555; }
+.quantity { width:60px; margin-top:5px; }
+.order-btn { margin-top:10px; background:#27ae60; color:white; border:none; padding:10px; width:100%; border-radius:5px; cursor:pointer; font-size:14px; }
+.order-btn:hover { background:#2ecc71; }
+@media (max-width: 600px) { .container { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Grocery Web Demo</h1>
+  <p>Select products and send order via WhatsApp</p>
+</header>
+<div class="container" id="categories"></div>
+<script>
+const categories = [
+  {name:'Chal (Rice)', products:[
+      {name:'Basmati Rice', company:'ABC', description:'Premium basmati rice', price:60, img:'https://via.placeholder.com/60'},
+      {name:'Non-Basmati Rice', company:'XYZ', description:'Regular rice', price:50, img:'https://via.placeholder.com/60'}
+  ]},
+  {name:'Dal (Lentils)', products:[
+      {name:'Moong Dal', company:'PQR', description:'Yellow moong dal', price:120, img:'https://via.placeholder.com/60'},
+      {name:'Masoor Dal', company:'LMN', description:'Red lentils', price:100, img:'https://via.placeholder.com/60'}
+  ]},
+  {name:'Tel (Oil)', products:[
+      {name:'Mustard Oil', company:'XYZ', description:'Cold pressed mustard oil', price:150, img:'https://via.placeholder.com/60'},
+      {name:'Sunflower Oil', company:'ABC', description:'Refined sunflower oil', price:140, img:'https://via.placeholder.com/60'}
+  ]},
+  {name:'Masala', products:[
+      {name:'Turmeric Powder', company:'LMN', description:'Pure turmeric powder', price:80, img:'https://via.placeholder.com/60'},
+      {name:'Chilli Powder', company:'PQR', description:'Spicy red chilli powder', price:70, img:'https://via.placeholder.com/60'}
+  ]},
+  {name:'Biscuit', products:[
+      {name:'Marie Biscuit', company:'ABC', description:'Light biscuit', price:20, img:'https://via.placeholder.com/60'},
+      {name:'Butter Biscuit', company:'XYZ', description:'Butter flavored', price:30, img:'https://via.placeholder.com/60'}
+  ]},
+  {name:'Chini (Sugar)', products:[
+      {name:'White Sugar', company:'LMN', description:'Refined sugar', price:50, img:'https://via.placeholder.com/60'},
+      {name:'Brown Sugar', company:'PQR', description:'Natural brown sugar', price:60, img:'https://via.placeholder.com/60'}
+  ]},
+  {name:'Noodles', products:[
+      {name:'Instant Noodles', company:'ABC', description:'Quick snack noodles', price:15, img:'https://via.placeholder.com/60'},
+      {name:'Egg Noodles', company:'XYZ', description:'Egg flavored noodles', price:25, img:'https://via.placeholder.com/60'}
+  ]},
+  {name:'Snack', products:[
+      {name:'Potato Chips', company:'LMN', description:'Crispy chips', price:30, img:'https://via.placeholder.com/60'},
+      {name:'Corn Snacks', company:'PQR', description:'Corn-based snack', price:35, img:'https://via.placeholder.com/60'}
+  ]}
+];
 
+const container = document.getElementById('categories');
+
+categories.forEach(cat => {
+  const catDiv = document.createElement('div');
+  catDiv.className='category';
+  const h2 = document.createElement('h2');
+  h2.textContent=cat.name;
+  catDiv.appendChild(h2);
+
+  cat.products.forEach(prod => {
+    const prodDiv = document.createElement('div');
+    prodDiv.className='product';
+
+    const img = document.createElement('img');
+    img.src=prod.img;
+    prodDiv.appendChild(img);
+
+    const details = document.createElement('div');
+    details.className='product-details';
+    const title = document.createElement('h4');
+    title.textContent=`${prod.name} (${prod.company})`;
+    const desc = document.createElement('p');
+    desc.textContent=prod.description;
+    details.appendChild(title);
+    details.appendChild(desc);
+
+    const qty = document.createElement('input');
+    qty.type='number'; qty.min='0'; qty.value='0'; qty.className='quantity';
+    details.appendChild(qty);
+
+    prodDiv.appendChild(details);
+    catDiv.appendChild(prodDiv);
+
+    prod.inputElement = qty;
+  });
+
+  const orderBtn = document.createElement('button');
+  orderBtn.className='order-btn';
+  orderBtn.textContent='Order via WhatsApp';
+  orderBtn.onclick = ()=>{
+    let message='Grocery Order:\n';
+    let hasItem=false;
+    cat.products.forEach(prod=>{
+      if(prod.inputElement && prod.inputElement.value>0){
+        message+=`${prod.name} (${prod.company}): ${prod.inputElement.value}\n`;
+        hasItem=true;
+      }
+    });
+    if(!hasItem){
+      alert('Please select at least one item!');
+      return;
+    }
+    const waLink=`https://wa.me/917557820107?text=${encodeURIComponent(message)}`;
+    window.open(waLink,'_blank');
+  };
+  catDiv.appendChild(orderBtn);
+  container.appendChild(catDiv);
+});
+</script>
+</body>
+</html>
