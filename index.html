@@ -1,112 +1,162 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Rishaan Daily Needs</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rishaan Daily Needs</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #e6f9e6, #ffffcc);
-    }
+<style>
+body{
+margin:0;
+font-family:Arial;
+scroll-behavior:smooth;
+background:linear-gradient(to bottom,#e8f5e9,#fffde7);
+}
 
-    header {
-      background: linear-gradient(to right, #2e7d32, #fbc02d);
-      padding: 20px;
-      text-align: center;
-      color: white;
-    }
+/* HEADER */
+header{
+background:linear-gradient(to right,#1b5e20,#fbc02d);
+color:white;
+text-align:center;
+padding:15px;
+position:sticky;
+top:0;
+z-index:1000;
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-      letter-spacing: 1px;
-    }
+header h1{
+margin:0;
+font-size:22px;
+}
 
-    header p {
-      margin: 5px 0 0;
-      font-size: 14px;
-    }
+header p{
+margin:5px 0 0;
+font-size:13px;
+}
 
-    .banner {
-      background: linear-gradient(to right, #4caf50, #ffeb3b);
-      padding: 30px 15px;
-      text-align: center;
-      color: #222;
-      font-size: 20px;
-      font-weight: bold;
-    }
+/* BANNER */
+.banner{
+text-align:center;
+padding:20px;
+font-weight:bold;
+font-size:18px;
+}
 
-    .section-title {
-      text-align: center;
-      margin: 25px 0 10px;
-      font-size: 20px;
-      color: #2e7d32;
-      font-weight: bold;
-    }
+/* ROUND CATEGORY TOP */
+.top-categories{
+display:flex;
+overflow-x:auto;
+gap:15px;
+padding:15px;
+}
 
-    .categories {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      padding: 15px;
-    }
+.top-categories a{
+text-align:center;
+text-decoration:none;
+color:black;
+font-size:12px;
+}
 
-    .category-card {
-      background: white;
-      border-radius: 12px;
-      padding: 15px;
-      text-align: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      font-weight: bold;
-      color: #2e7d32;
-      transition: 0.3s;
-    }
+.top-categories img{
+width:70px;
+height:70px;
+border-radius:50%;
+border:3px solid #2e7d32;
+}
 
-    .category-card:hover {
-      transform: scale(1.05);
-    }
+/* SECTION */
+.section{
+padding:20px 15px;
+}
 
-    footer {
-      background: #2e7d32;
-      color: white;
-      text-align: center;
-      padding: 12px;
-      margin-top: 20px;
-      font-size: 14px;
-    }
+.section h2{
+color:#2e7d32;
+border-bottom:2px solid #fbc02d;
+padding-bottom:5px;
+}
 
-  </style>
+/* PRODUCT CARD */
+.product{
+background:white;
+padding:10px;
+margin:10px 0;
+border-radius:8px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* WHATSAPP BUTTON */
+.whatsapp{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#25D366;
+color:white;
+padding:12px 15px;
+border-radius:50px;
+text-decoration:none;
+font-weight:bold;
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <h1>RISHAAN DUBEY</h1>
-    <p>Rishaan Daily Needs Grocery Store</p>
-  </header>
+<header>
+<h1>RISHAAN DUBEY</h1>
+<p>Rishaan Daily Needs Grocery Store</p>
+</header>
 
-  <div class="banner">
-    🛒 Fresh Grocery | Best Price | Fast Delivery 🚀
-  </div>
+<div class="banner">
+🛒 Fresh Grocery | Best Price | Fast Delivery 🚀
+</div>
 
-  <div class="section-title">
-    Shop By Category
-  </div>
+<!-- ROUND CATEGORY -->
+<div class="top-categories">
+<a href="#rice"><img src="https://i.imgur.com/6X4X9EJ.png"><br>Rice</a>
+<a href="#dal"><img src="https://i.imgur.com/dyC3QYB.png"><br>Dal</a>
+<a href="#masala"><img src="https://i.imgur.com/Y2bK7oT.png"><br>Masala</a>
+<a href="#oil"><img src="https://i.imgur.com/YQ8mQ0B.png"><br>Oil</a>
+<a href="#snacks"><img src="https://i.imgur.com/8QfZ4cM.png"><br>Snacks</a>
+</div>
 
-  <div class="categories">
-    <div class="category-card">Rice & Atta</div>
-    <div class="category-card">Oil & Masala</div>
-    <div class="category-card">Snacks</div>
-    <div class="category-card">Beverages</div>
-    <div class="category-card">Dairy Products</div>
-    <div class="category-card">Daily Essentials</div>
-  </div>
+<!-- RICE SECTION -->
+<div id="rice" class="section">
+<h2>Rice</h2>
+<div class="product">Basmati Rice - ₹60/kg</div>
+<div class="product">Miniket Rice - ₹45/kg</div>
+</div>
 
-  <footer>
-    © 2026 Rishaan Daily Needs | All Rights Reserved
-  </footer>
+<!-- DAL SECTION -->
+<div id="dal" class="section">
+<h2>Dal</h2>
+<div class="product">Masoor Dal - ₹90/kg</div>
+<div class="product">Moong Dal - ₹110/kg</div>
+</div>
+
+<!-- MASALA SECTION -->
+<div id="masala" class="section">
+<h2>Masala</h2>
+<div class="product">Turmeric Powder - ₹25</div>
+<div class="product">Chilli Powder - ₹30</div>
+</div>
+
+<!-- OIL SECTION -->
+<div id="oil" class="section">
+<h2>Oil</h2>
+<div class="product">Mustard Oil - ₹150/L</div>
+<div class="product">Refined Oil - ₹130/L</div>
+</div>
+
+<!-- SNACKS SECTION -->
+<div id="snacks" class="section">
+<h2>Snacks</h2>
+<div class="product">Biscuit - ₹10</div>
+<div class="product">Chips - ₹20</div>
+</div>
+
+<!-- WHATSAPP BUTTON -->
+<a class="whatsapp" href="https://wa.me/917557820107">
+Order Now
+</a>
 
 </body>
 </html>
