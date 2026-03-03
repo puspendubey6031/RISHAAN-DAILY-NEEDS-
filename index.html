@@ -4,185 +4,193 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rishaan Daily Needs</title>
+
 <style>
-  body { font-family: Arial, sans-serif; margin:0; background-color:#f5f5f5;}
-  header { background:#4CAF50; color:white; padding:15px; text-align:center; position:relative;}
-  header h1 { margin:0; font-size:28px; color:#FFD700; }
-  header p { margin:0; font-size:16px; font-style:italic; }
-  .banner { text-align:center; background:#FFD700; padding:10px; margin-bottom:10px; font-weight:bold; }
-  .categories { display:flex; overflow-x:auto; padding:10px; gap:10px; }
-  .category { flex:none; text-align:center; cursor:pointer; }
-  .category img { width:60px; height:60px; border-radius:50%; }
-  .category p { margin:5px 0 0 0; font-size:14px; }
-  .product-section { padding:10px; }
-  .product { background:white; padding:10px; margin-bottom:10px; display:flex; gap:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-  .product img { width:80px; height:80px; object-fit:cover; border-radius:5px; cursor:pointer; }
-  .product-details { flex:1; }
-  .product-details h3 { margin:0 0 5px 0; font-size:18px; cursor:pointer; }
-  .product-details p.desc { font-size:14px; color:#555; margin:0 0 5px 0;}
-  .product-details div { margin:2px 0; }
-  input[type="number"] { width:60px; padding:4px; }
-  input.price { width:70px; padding:4px; background:#eee; border:none; color:#333; }
-  button.whatsapp { width:100%; padding:10px; background:#25D366; color:white; border:none; border-radius:5px; font-size:16px; cursor:pointer;}
-  .show-more-btn { background:#4CAF50; color:white; padding:5px 10px; border:none; border-radius:5px; cursor:pointer; margin-bottom:10px;}
-  /* Modal styles */
-  .modal { display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background: rgba(0,0,0,0.5);}
-  .modal-content { background:white; margin:10% auto; padding:20px; border-radius:10px; width:90%; max-width:400px; position:relative;}
-  .close { position:absolute; top:10px; right:15px; font-size:24px; cursor:pointer;}
+body{
+  font-family: Arial, sans-serif;
+  margin:0;
+  background:#f4f6f9;
+}
+header{
+  background:#0d6efd;
+  color:white;
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+h1{margin:0;font-size:20px;}
+.lang-btn{
+  background:white;
+  color:#0d6efd;
+  border:none;
+  padding:5px 10px;
+  margin-left:5px;
+  cursor:pointer;
+  border-radius:5px;
+}
+.container{
+  padding:15px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:15px;
+}
+.card{
+  background:white;
+  padding:10px;
+  border-radius:10px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+  text-align:center;
+}
+.price{
+  font-weight:bold;
+  margin:5px 0;
+}
+.qty-box{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.qty-box button{
+  width:25px;
+  height:25px;
+}
+.order-btn{
+  width:100%;
+  padding:12px;
+  background:#25d366;
+  color:white;
+  border:none;
+  font-size:16px;
+  cursor:pointer;
+  position:fixed;
+  bottom:0;
+}
+.form-popup{
+  display:none;
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:white;
+  padding:20px;
+  width:90%;
+  max-width:350px;
+  box-shadow:0 0 10px rgba(0,0,0,0.3);
+  border-radius:10px;
+}
+.form-popup input, .form-popup textarea{
+  width:100%;
+  margin:5px 0;
+  padding:8px;
+}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Rishaan Daily Needs</h1>
-  <p>Fresh Quality Foods</p>
+<h1>Rishaan Daily Needs</h1>
+<div>
+<button class="lang-btn" onclick="setLang('bn')">BN</button>
+<button class="lang-btn" onclick="setLang('hi')">HI</button>
+<button class="lang-btn" onclick="setLang('en')">EN</button>
+</div>
 </header>
 
-<div class="banner">🎉 Recent Deliveries / Offers 🎉</div>
+<div class="container" id="productList"></div>
 
-<div class="categories">
-  <div class="category" onclick="scrollToCategory('rice-section')"><img src="https://i.ibb.co/8b2Qk7T/rice.png" alt="Rice"><p>Rice</p></div>
-  <div class="category" onclick="scrollToCategory('lentils-section')"><img src="https://i.ibb.co/fXvY6Kn/lentils.png" alt="Lentils"><p>Lentils</p></div>
-  <div class="category" onclick="scrollToCategory('spices-section')"><img src="https://i.ibb.co/d2bWPTz/spices.png" alt="Spices"><p>Spices</p></div>
-</div>
+<button class="order-btn" onclick="openForm()">Place Order</button>
 
-<!-- Rice Section -->
-<div class="product-section" id="rice-section">
-  <h2>Rice</h2>
-  <div class="product" onclick="openModal('Basmati Rice','India Gate','Premium long grain rice','100')">
-    <img src="https://i.ibb.co/8b2Qk7T/rice.png" alt="Basmati Rice">
-    <div class="product-details">
-      <h3>Basmati Rice</h3>
-      <p class="desc">Premium long grain rice</p>
-      <div>Price: ₹<input type="number" class="price" value="100" readonly> /kg</div>
-      <div>Quantity: <input type="number" class="qty" value="1" min="0.1" step="0.1"> kg</div>
-      <div>Brand: India Gate</div>
-    </div>
-  </div>
-  <div class="product extra-product" style="display:none;" onclick="openModal('Sona Masuri','LUZ','Light & aromatic sona masuri rice','90')">
-    <img src="https://i.ibb.co/8b2Qk7T/rice.png" alt="Sona Masuri Rice">
-    <div class="product-details">
-      <h3>Sona Masuri Rice</h3>
-      <p class="desc">Light & aromatic sona masuri rice</p>
-      <div>Price: ₹<input type="number" class="price" value="90" readonly> /kg</div>
-      <div>Quantity: <input type="number" class="qty" value="1" min="0.1" step="0.1"> kg</div>
-      <div>Brand: LUZ</div>
-    </div>
-  </div>
-  <button class="show-more-btn" onclick="toggleProducts('rice')">Show More</button>
-</div>
-
-<!-- Lentils Section -->
-<div class="product-section" id="lentils-section">
-  <h2>Lentils</h2>
-  <div class="product" onclick="openModal('Moong Dal','LUZ','High-quality green moong dal','120')">
-    <img src="https://i.ibb.co/fXvY6Kn/lentils.png" alt="Moong Dal">
-    <div class="product-details">
-      <h3>Moong Dal</h3>
-      <p class="desc">High-quality green moong dal</p>
-      <div>Price: ₹<input type="number" class="price" value="120" readonly> /kg</div>
-      <div>Quantity: <input type="number" class="qty" value="1" min="0.1" step="0.1"> kg</div>
-      <div>Brand: LUZ</div>
-    </div>
-  </div>
-  <div class="product extra-product" style="display:none;" onclick="openModal('Masoor Dal','GoodBrand','Red lentils for daily cooking','110')">
-    <img src="https://i.ibb.co/fXvY6Kn/lentils.png" alt="Masoor Dal">
-    <div class="product-details">
-      <h3>Masoor Dal</h3>
-      <p class="desc">Red lentils for daily cooking</p>
-      <div>Price: ₹<input type="number" class="price" value="110" readonly> /kg</div>
-      <div>Quantity: <input type="number" class="qty" value="1" min="0.1" step="0.1"> kg</div>
-      <div>Brand: GoodBrand</div>
-    </div>
-  </div>
-  <button class="show-more-btn" onclick="toggleProducts('lentils')">Show More</button>
-</div>
-
-<!-- Spices Section -->
-<div class="product-section" id="spices-section">
-  <h2>Spices</h2>
-  <div class="product" onclick="openModal('Turmeric Powder','SpiceCo','Fresh and aromatic turmeric powder','200')">
-    <img src="https://i.ibb.co/d2bWPTz/spices.png" alt="Turmeric Powder">
-    <div class="product-details">
-      <h3>Turmeric Powder</h3>
-      <p class="desc">Fresh and aromatic turmeric powder</p>
-      <div>Price: ₹<input type="number" class="price" value="200" readonly> /kg</div>
-      <div>Quantity: <input type="number" class="qty" value="1" min="0.1" step="0.1"> kg</div>
-      <div>Brand: SpiceCo</div>
-    </div>
-  </div>
-  <div class="product extra-product" style="display:none;" onclick="openModal('Chili Powder','SpiceCo','Hot and fresh chili powder','250')">
-    <img src="https://i.ibb.co/d2bWPTz/spices.png" alt="Chili Powder">
-    <div class="product-details">
-      <h3>Chili Powder</h3>
-      <p class="desc">Hot and fresh chili powder</p>
-      <div>Price: ₹<input type="number" class="price" value="250" readonly> /kg</div>
-      <div>Quantity: <input type="number" class="qty" value="1" min="0.1" step="0.1"> kg</div>
-      <div>Brand: SpiceCo</div>
-    </div>
-  </div>
-  <button class="show-more-btn" onclick="toggleProducts('spices')">Show More</button>
-</div>
-
-<button class="whatsapp" onclick="sendWhatsApp()">Order via WhatsApp</button>
-
-<!-- Product Modal -->
-<div id="productModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <h2 id="modalName"></h2>
-    <p id="modalBrand"></p>
-    <img id="modalImage" src="" style="width:100%; height:auto; border-radius:8px;">
-    <p id="modalDesc"></p>
-    <div>Price: ₹<input type="number" id="modalPrice" readonly> /kg</div>
-    <div>Quantity: <input type="number" id="modalQty" value="1" min="0.1" step="0.1"> kg</div>
-  </div>
+<div class="form-popup" id="orderForm">
+<h3>Customer Details</h3>
+<input type="text" id="custName" placeholder="Name" required>
+<input type="text" id="custPhone" placeholder="Phone Number" required>
+<textarea id="custAddress" placeholder="Address" required></textarea>
+<button onclick="sendOrder()">Send to WhatsApp</button>
 </div>
 
 <script>
-function scrollToCategory(id) {
-  document.getElementById(id).scrollIntoView({behavior:"smooth"});
+let lang="bn";
+
+let products=[
+{ id:1, name:{bn:"চাল",hi:"चावल",en:"Rice"}, price:50, qty:0, unit:"kg"},
+{ id:2, name:{bn:"চিনি",hi:"चीनी",en:"Sugar"}, price:45, qty:0, unit:"kg"},
+{ id:3, name:{bn:"তেল",hi:"तेल",en:"Oil"}, price:120, qty:0, unit:"pcs"},
+{ id:4, name:{bn:"ডাল",hi:"दाल",en:"Lentils"}, price:90, qty:0, unit:"kg"}
+];
+
+function render(){
+let html="";
+products.forEach(p=>{
+html+=`
+<div class="card">
+<h3>${p.name[lang]}</h3>
+<div class="price">Rate: ${p.price}</div>
+<div class="qty-box">
+<button onclick="changeQty(${p.id},-1)">-</button>
+<span style="margin:0 10px">${p.qty}</span>
+<button onclick="changeQty(${p.id},1)">+</button>
+</div>
+</div>
+`;
+});
+document.getElementById("productList").innerHTML=html;
 }
 
-function toggleProducts(category) {
-  const section = document.getElementById(category + '-section');
-  const extras = section.querySelectorAll('.extra-product');
-  extras.forEach(p => { p.style.display = p.style.display==='none'?'flex':'none'; });
+function changeQty(id,val){
+let p=products.find(x=>x.id==id);
+p.qty=Math.max(0,p.qty+val);
+render();
 }
 
-// Modal functions
-function openModal(name, brand, desc, price){
-  document.getElementById('modalName').innerText = name;
-  document.getElementById('modalBrand').innerText = brand;
-  document.getElementById('modalDesc').innerText = desc;
-  document.getElementById('modalPrice').value = price;
-  document.getElementById('modalQty').value = 1;
-  document.getElementById('productModal').style.display = 'block';
-}
-function closeModal(){
-  document.getElementById('productModal').style.display = 'none';
+function setLang(l){
+lang=l;
+render();
 }
 
-// WhatsApp Order
-function sendWhatsApp() {
-  let products = document.querySelectorAll('.product, .extra-product');
-  let message = 'Rishaan Daily Needs Order:%0A%0A';
-  let total = 0;
-  products.forEach(p => {
-    if(p.style.display==='none') return;
-    let name = p.querySelector('h3').innerText;
-    let desc = p.querySelector('.desc').innerText;
-    let price = parseFloat(p.querySelector('.price').value);
-    let qty = parseFloat(p.querySelector('.qty').value);
-    if(qty<=0) return;
-    let amount = (price*qty).toFixed(2);
-    total += parseFloat(amount);
-    message += `${name}\n${desc}\nQuantity: ${qty} kg\nPrice: ₹${price}/kg\nAmount: ₹${amount}\n\n`;
-  });
-  message += `Total: ₹${total.toFixed(2)}`;
-  let whatsappUrl = `https://wa.me/?text=${message}`;
-  window.open(whatsappUrl,'_blank');
+function openForm(){
+document.getElementById("orderForm").style.display="block";
 }
+
+function sendOrder(){
+let name=document.getElementById("custName").value;
+let phone=document.getElementById("custPhone").value;
+let address=document.getElementById("custAddress").value;
+
+if(!name||!phone||!address){
+alert("Please fill all details");
+return;
+}
+
+let now=new Date();
+let date=now.toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+let time=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+
+let msg="🛒 Rishaan Daily Needs Order\n\n";
+msg+="Order Date: "+date+"\n";
+msg+="Order Time: "+time+"\n\n";
+msg+="Product List:\n";
+
+let count=1;
+products.forEach(p=>{
+if(p.qty>0){
+msg+=count+". "+p.name.en+" - "+p.qty+" "+p.unit+"\n";
+count++;
+}
+});
+
+msg+="\n----------------------\n\n";
+msg+="Customer Details:\n";
+msg+="Name: "+name+"\n";
+msg+="Phone: "+phone+"\n";
+msg+="Address: "+address+"\n\n";
+msg+="Delivery Charge: \n";
+
+let url="https://wa.me/917557820107?text="+encodeURIComponent(msg);
+window.open(url,"_blank");
+}
+
+render();
 </script>
 
 </body>
