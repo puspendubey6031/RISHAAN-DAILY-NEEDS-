@@ -1,196 +1,268 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rishaan Daily Needs</title>
 
 <style>
-body{
-  font-family: Arial, sans-serif;
-  margin:0;
-  background:#f4f6f9;
+body{font-family:Arial;margin:0;background:#f2f2f2}
+
+/* Banner */
+.banner{
+background:linear-gradient(45deg,#0d6efd,#25d366);
+color:white;
+padding:25px;
+text-align:center;
+font-size:22px;
+font-weight:bold;
 }
-header{
-  background:#0d6efd;
-  color:white;
-  padding:15px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+
+/* Category */
+.categories{
+display:flex;
+overflow-x:auto;
+gap:15px;
+padding:15px;
+background:white;
 }
-h1{margin:0;font-size:20px;}
-.lang-btn{
-  background:white;
-  color:#0d6efd;
-  border:none;
-  padding:5px 10px;
-  margin-left:5px;
-  cursor:pointer;
-  border-radius:5px;
+.cat{
+text-align:center;
+cursor:pointer;
 }
-.container{
-  padding:15px;
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-  gap:15px;
+.cat img{
+width:70px;
+height:70px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid #25d366;
 }
+.cat p{margin:5px 0 0;font-size:14px}
+
+/* Product */
+.container{padding:15px}
 .card{
-  background:white;
-  padding:10px;
-  border-radius:10px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.1);
-  text-align:center;
+background:white;
+border-radius:12px;
+box-shadow:0 4px 8px rgba(0,0,0,0.1);
+padding:15px;
+margin-bottom:15px;
+display:none;
 }
-.price{
-  font-weight:bold;
-  margin:5px 0;
+.card img{
+width:100%;
+height:150px;
+object-fit:cover;
+border-radius:10px;
 }
-.qty-box{
-  display:flex;
-  justify-content:center;
-  align-items:center;
+.price{font-weight:bold;margin:8px 0}
+input[type="number"]{
+width:100px;
+padding:8px;
+font-size:16px;
 }
-.qty-box button{
-  width:25px;
-  height:25px;
+select{padding:6px}
+
+.summary{
+background:white;
+padding:15px;
+border-radius:10px;
+margin-top:10px;
+font-weight:bold;
 }
+
 .order-btn{
-  width:100%;
-  padding:12px;
-  background:#25d366;
-  color:white;
-  border:none;
-  font-size:16px;
-  cursor:pointer;
-  position:fixed;
-  bottom:0;
+width:100%;
+padding:15px;
+background:#25d366;
+color:white;
+font-size:18px;
+border:none;
+border-radius:8px;
+margin-top:10px;
 }
-.form-popup{
-  display:none;
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:white;
-  padding:20px;
-  width:90%;
-  max-width:350px;
-  box-shadow:0 0 10px rgba(0,0,0,0.3);
-  border-radius:10px;
+
+/* Popup */
+.popup{
+display:none;
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:white;
+padding:20px;
+width:90%;
+max-width:350px;
+border-radius:12px;
+box-shadow:0 0 15px rgba(0,0,0,0.3);
 }
-.form-popup input, .form-popup textarea{
-  width:100%;
-  margin:5px 0;
-  padding:8px;
+.popup input, .popup textarea{
+width:100%;
+padding:8px;
+margin-bottom:10px;
+}
+.whatsapp-btn{
+background:#25d366;
+color:white;
+padding:12px;
+border:none;
+width:100%;
+font-size:16px;
+border-radius:8px;
+}
+.admin{
+margin-top:8px;
+font-size:13px;
+}
+.admin input{
+width:70px;
 }
 </style>
 </head>
 <body>
 
-<header>
-<h1>Rishaan Daily Needs</h1>
-<div>
-<button class="lang-btn" onclick="setLang('bn')">BN</button>
-<button class="lang-btn" onclick="setLang('hi')">HI</button>
-<button class="lang-btn" onclick="setLang('en')">EN</button>
-</div>
-</header>
+<div class="banner">🛒 Rishaan Daily Needs</div>
 
-<div class="container" id="productList"></div>
+<div class="categories">
+<div class="cat" onclick="showCategory('rice')">
+<img src="https://via.placeholder.com/100">
+<p>Rice</p>
+</div>
+<div class="cat" onclick="showCategory('sugar')">
+<img src="https://via.placeholder.com/100">
+<p>Sugar</p>
+</div>
+</div>
+
+<div class="container">
+
+<div class="card rice">
+<img src="https://via.placeholder.com/300x150">
+<h3>Rice</h3>
+<div class="price">₹ <span id="price1"></span></div>
+Qty: <input type="number" id="qty1" min="0" oninput="updateTotal()">
+<select id="unit1">
+<option>kg</option>
+<option>gram</option>
+<option>packet</option>
+</select>
+
+<div class="admin">
+Admin Price: 
+<input type="number" id="admin1">
+<button onclick="savePrice(1)">Save</button>
+</div>
+</div>
+
+<div class="card sugar">
+<img src="https://via.placeholder.com/300x150">
+<h3>Sugar</h3>
+<div class="price">₹ <span id="price2"></span></div>
+Qty: <input type="number" id="qty2" min="0" oninput="updateTotal()">
+<select id="unit2">
+<option>kg</option>
+<option>gram</option>
+<option>packet</option>
+</select>
+
+<div class="admin">
+Admin Price: 
+<input type="number" id="admin2">
+<button onclick="savePrice(2)">Save</button>
+</div>
+</div>
+
+<div class="summary" id="summary">
+Total Items: 0 | Total Amount: ₹0
+</div>
 
 <button class="order-btn" onclick="openForm()">Place Order</button>
 
-<div class="form-popup" id="orderForm">
+</div>
+
+<div class="popup" id="popup">
 <h3>Customer Details</h3>
-<input type="text" id="custName" placeholder="Name" required>
-<input type="text" id="custPhone" placeholder="Phone Number" required>
-<textarea id="custAddress" placeholder="Address" required></textarea>
-<button onclick="sendOrder()">Send to WhatsApp</button>
+<input type="text" id="name" placeholder="Name">
+<input type="text" id="phone" placeholder="Phone">
+<textarea id="address" placeholder="Address"></textarea>
+<button class="whatsapp-btn" onclick="sendOrder()">Send to WhatsApp</button>
 </div>
 
 <script>
-let lang="bn";
+let prices={
+1:localStorage.getItem("price1")||50,
+2:localStorage.getItem("price2")||40
+};
 
-let products=[
-{ id:1, name:{bn:"চাল",hi:"चावल",en:"Rice"}, price:50, qty:0, unit:"kg"},
-{ id:2, name:{bn:"চিনি",hi:"चीनी",en:"Sugar"}, price:45, qty:0, unit:"kg"},
-{ id:3, name:{bn:"তেল",hi:"तेल",en:"Oil"}, price:120, qty:0, unit:"pcs"},
-{ id:4, name:{bn:"ডাল",hi:"दाल",en:"Lentils"}, price:90, qty:0, unit:"kg"}
-];
+function loadPrices(){
+document.getElementById("price1").innerText=prices[1];
+document.getElementById("price2").innerText=prices[2];
+document.getElementById("admin1").value=prices[1];
+document.getElementById("admin2").value=prices[2];
+}
+loadPrices();
 
-function render(){
-let html="";
-products.forEach(p=>{
-html+=`
-<div class="card">
-<h3>${p.name[lang]}</h3>
-<div class="price">Rate: ${p.price}</div>
-<div class="qty-box">
-<button onclick="changeQty(${p.id},-1)">-</button>
-<span style="margin:0 10px">${p.qty}</span>
-<button onclick="changeQty(${p.id},1)">+</button>
-</div>
-</div>
-`;
+function savePrice(id){
+let val=document.getElementById("admin"+id).value;
+localStorage.setItem("price"+id,val);
+prices[id]=val;
+loadPrices();
+updateTotal();
+}
+
+function showCategory(cat){
+document.querySelectorAll('.card').forEach(c=>c.style.display="none");
+document.querySelectorAll('.'+cat).forEach(c=>c.style.display="block");
+}
+
+function updateTotal(){
+let totalItems=0;
+let totalAmount=0;
+
+[1,2].forEach(id=>{
+let qty=parseFloat(document.getElementById("qty"+id).value)||0;
+totalItems+=qty;
+totalAmount+=qty*prices[id];
 });
-document.getElementById("productList").innerHTML=html;
-}
 
-function changeQty(id,val){
-let p=products.find(x=>x.id==id);
-p.qty=Math.max(0,p.qty+val);
-render();
-}
-
-function setLang(l){
-lang=l;
-render();
+document.getElementById("summary").innerText=
+"Total Items: "+totalItems+" | Total Amount: ₹"+totalAmount;
 }
 
 function openForm(){
-document.getElementById("orderForm").style.display="block";
+if(document.getElementById("summary").innerText.includes("₹0")){
+alert("Please select product first");
+return;
+}
+document.getElementById("popup").style.display="block";
 }
 
 function sendOrder(){
-let name=document.getElementById("custName").value;
-let phone=document.getElementById("custPhone").value;
-let address=document.getElementById("custAddress").value;
+let name=document.getElementById("name").value;
+let phone=document.getElementById("phone").value;
+let address=document.getElementById("address").value;
 
-if(!name||!phone||!address){
-alert("Please fill all details");
-return;
-}
-
-let now=new Date();
-let date=now.toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
-let time=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+if(!name||!phone||!address){alert("Fill all details");return;}
 
 let msg="🛒 Rishaan Daily Needs Order\n\n";
-msg+="Order Date: "+date+"\n";
-msg+="Order Time: "+time+"\n\n";
-msg+="Product List:\n";
 
-let count=1;
-products.forEach(p=>{
-if(p.qty>0){
-msg+=count+". "+p.name.en+" - "+p.qty+" "+p.unit+"\n";
-count++;
+[1,2].forEach(id=>{
+let qty=document.getElementById("qty"+id).value;
+let unit=document.getElementById("unit"+id).value;
+if(qty>0){
+let pname=id==1?"Rice":"Sugar";
+msg+=pname+" - "+qty+" "+unit+"\n";
 }
 });
 
-msg+="\n----------------------\n\n";
-msg+="Customer Details:\n";
+msg+="\nTotal: "+document.getElementById("summary").innerText;
+msg+="\n\nCustomer Details:\n";
 msg+="Name: "+name+"\n";
 msg+="Phone: "+phone+"\n";
-msg+="Address: "+address+"\n\n";
-msg+="Delivery Charge: \n";
+msg+="Address: "+address;
 
-let url="https://wa.me/917557820107?text="+encodeURIComponent(msg);
-window.open(url,"_blank");
+window.open("https://wa.me/917557820107?text="+encodeURIComponent(msg));
 }
-
-render();
 </script>
 
 </body>
