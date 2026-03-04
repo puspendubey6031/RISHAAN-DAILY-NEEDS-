@@ -5,30 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rishaan Daily Needs</title>
 <style>
-  body { margin:0; font-family: Arial, sans-serif; background:#f8f8f8; }
-  header { position: fixed; top:0; left:0; right:0; background:#2e7d32; color:white; padding:15px; z-index:10; display:flex; justify-content:space-between; align-items:center; }
-  header h1 { margin:0; font-size:20px; }
-  header select { padding:5px; border-radius:5px; border:none; }
-  .slogan { margin-top:70px; text-align:center; padding:10px; }
-  .slogan span { display:block; font-size:18px; font-weight:bold; padding:5px 0; }
-  .slogan .doorstep { color: #fbc02d; }
-  .slogan .premium-price { color: #d32f2f; }
-  .slogan .premium-quality { color: #388e3c; }
-  .categories { display:flex; overflow-x:auto; padding:10px; gap:10px; margin:10px; }
-  .category { flex:0 0 auto; text-align:center; }
-  .category img { width:60px; height:60px; border-radius:50%; object-fit:cover; }
-  .products { display:flex; flex-wrap:wrap; justify-content:center; gap:15px; padding-bottom:90px; }
-  .product-card { background:white; border-radius:10px; padding:10px; width:150px; box-shadow:0 2px 5px rgba(0,0,0,0.1); text-align:center; }
-  .product-card img { width:100%; height:100px; object-fit:cover; border-radius:5px; }
-  .brand { font-weight:bold; color:#d32f2f; margin-top:5px; display:block; }
-  .description { font-size:12px; color:#555; }
-  .quantity { width:100%; margin:5px 0; }
-  .add-btn { background:#2e7d32; color:white; border:none; padding:5px; width:100%; border-radius:5px; cursor:pointer; }
-  .cart-bar { position: fixed; bottom:0; left:0; right:0; background:#333; color:white; display:flex; justify-content:space-between; align-items:center; padding:10px; gap:10px; }
-  .cart-info { font-size:14px; }
-  .order-btn { background:#2e7d32; border:none; padding:10px; color:white; border-radius:5px; cursor:pointer; }
-  .admin-btn { background:#d32f2f; border:none; padding:10px; color:white; border-radius:5px; cursor:pointer; }
-  select, input[type=number] { border-radius:5px; padding:5px; width:100%; margin:3px 0; }
+body { margin:0; font-family: Arial, sans-serif; background:#f8f8f8; }
+header { position: fixed; top:0; left:0; right:0; background:#2e7d32; color:white; padding:12px 15px; z-index:10; display:flex; justify-content:space-between; align-items:center; }
+header h1 { margin:0; font-size:20px; }
+header select { padding:4px 6px; border-radius:5px; border:none; font-size:14px; }
+.slogan { margin-top:60px; text-align:center; padding:8px 0; font-weight:bold; }
+.slogan span { display:inline-block; margin:0 8px; font-size:16px; }
+.slogan .doorstep { color: #fbc02d; }
+.slogan .premium-price { color: #c62828; /* exact red from image */ }
+.slogan .premium-quality { color: #2e7d32; }
+.categories { display:flex; overflow-x:auto; padding:10px; gap:10px; margin:10px; }
+.category { flex:0 0 auto; text-align:center; }
+.category img { width:60px; height:60px; border-radius:50%; object-fit:cover; }
+.products { display:flex; flex-direction:column; gap:15px; padding:10px 10px 90px 10px; }
+.product-card { background:white; border-radius:10px; padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); display:flex; gap:10px; align-items:center; }
+.product-card img { width:100px; height:100px; object-fit:cover; border-radius:5px; }
+.product-info { flex:1; }
+.brand { font-weight:bold; color:#d32f2f; margin-top:3px; display:block; }
+.description { font-size:12px; color:#555; margin-top:2px; }
+.quantity { width:100%; margin:5px 0; }
+.add-btn { background:#2e7d32; color:white; border:none; padding:5px; width:100%; border-radius:5px; cursor:pointer; }
+.cart-bar { position: fixed; bottom:0; left:0; right:0; background:#333; color:white; display:flex; justify-content:space-between; align-items:center; padding:10px; gap:10px; z-index:10; }
+.cart-info { font-size:14px; }
+.order-btn { background:#2e7d32; border:none; padding:10px; color:white; border-radius:5px; cursor:pointer; }
+.admin-btn { background:#d32f2f; border:none; padding:10px; color:white; border-radius:5px; cursor:pointer; }
+select, input[type=number] { border-radius:5px; padding:5px; width:100%; margin:3px 0; }
 </style>
 </head>
 <body>
@@ -38,6 +39,7 @@
   <select>
     <option value="en">EN</option>
     <option value="bn">BN</option>
+    <option value="hi">HI</option>
   </select>
 </header>
 
@@ -56,6 +58,8 @@
   <div class="category"><img src="https://i.imgur.com/2s0Bk6P.jpg" alt="Flour"><br>Flour</div>
   <div class="category"><img src="https://i.imgur.com/YhrxBCg.jpg" alt="Biscuits"><br>Biscuits</div>
   <div class="category"><img src="https://i.imgur.com/kk0v5vE.jpg" alt="Tea"><br>Tea</div>
+  <div class="category"><img src="https://i.imgur.com/2SnJcw5.jpg" alt="Coffee"><br>Coffee</div>
+  <div class="category"><img src="https://i.imgur.com/kWqAG6F.jpg" alt="Honey"><br>Honey</div>
 </div>
 
 <div class="products" id="product-list">
@@ -86,11 +90,13 @@ function renderProducts() {
     card.className = 'product-card';
     card.innerHTML = `
       <img src="${getProductImage(p)}" alt="${p.name}">
-      <div>${p.name}</div>
-      <span class="brand">${p.type==="Packet"?p.brand:"Loose"}</span>
-      <div class="description">${p.desc}</div>
-      <select class="quantity" id="qty-${i}">${p.quantityOptions.map(q=>`<option>${q}</option>`).join('')}</select>
-      <button class="add-btn" onclick="addToCart(${i})">Add</button>
+      <div class="product-info">
+        <div>${p.name}</div>
+        <span class="brand">${p.type==="Packet"?p.brand:"Loose"}</span>
+        <div class="description">${p.desc}</div>
+        <select class="quantity" id="qty-${i}">${p.quantityOptions.map(q=>`<option>${q}</option>`).join('')}</select>
+        <button class="add-btn" onclick="addToCart(${i})">Add</button>
+      </div>
     `;
     container.appendChild(card);
   });
