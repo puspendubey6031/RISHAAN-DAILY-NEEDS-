@@ -1,2 +1,98 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rishaan Daily Needs - Final Full Version</title>
+<style>
+body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f9f9f9; }
+header { background: linear-gradient(to right, #4CAF50, #FFEB3B); color:#fff; padding:20px; text-align:center; }
+header h1 { margin:0; font-size:2rem; }
+header p { margin:5px 0; font-size:1.1rem; }
+.category-scroll { display:flex; overflow-x:auto; padding:10px; background:#fff; }
+.category-scroll div { flex:0 0 auto; margin-right:10px; text-align:center; cursor:pointer; }
+.category-scroll img { border-radius:50%; width:80px; height:80px; }
+.product-section { padding:20px; }
+.product { display:flex; flex-direction:column; align-items:center; margin-bottom:20px; background:#fff; padding:15px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+.product img { width:120px; height:120px; object-fit:cover; border-radius:10px; }
+.product-name { font-weight:bold; margin:10px 0 5px; text-align:center; }
+.product-desc { font-size:0.9rem; color:#555; text-align:center; margin-bottom:10px; }
+.product-price { font-size:1rem; margin-bottom:10px; }
+.quantity { margin-bottom:10px; display:flex; justify-content:center; gap:5px; }
+button { background:#4CAF50; color:#fff; border:none; padding:8px 12px; border-radius:5px; cursor:pointer; }
+button:hover { background:#45a049; }
+.cart-drawer { position:fixed; right:-400px; top:0; width:350px; height:100%; background:#fff; box-shadow:-2px 0 5px rgba(0,0,0,0.2); transition:right 0.3s; padding:20px; overflow-y:auto; z-index:1000; }
+.cart-drawer.open { right:0; }
+.cart-item { display:flex; justify-content:space-between; margin-bottom:10px; }
+.checkout-btn { width:100%; margin-top:10px; background:#FF9800; }
+.admin-login { position:fixed; bottom:20px; right:20px; background:#2196F3; color:#fff; padding:10px 15px; border-radius:5px; cursor:pointer; z-index:1001; }
+.admin-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1002; }
+.admin-modal-content { background:#fff; padding:20px; border-radius:10px; width:300px; text-align:center; }
+.admin-modal input, select { width:80%; padding:5px; margin-bottom:10px; }
+.lang-switch { position:fixed; top:10px; right:10px; z-index:1003; }
+.lang-switch select { padding:5px; border-radius:5px; }
+.customer-form { background:#fff; padding:15px; margin:20px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+.customer-form input, .customer-form textarea { width:95%; padding:8px; margin-bottom:10px; border-radius:5px; border:1px solid #ccc; }
+.customer-form button { width:100%; background:#FF9800; color:#fff; padding:10px; border-radius:5px; border:none; cursor:pointer; }
+.customer-form button:hover { background:#fb8c00; }
+</style>
+</head>
+<body>
+<header>
+<h1>Rishaan Daily Needs</h1>
+<p>Fresh Grocery Delivered</p>
+</header>
+<div class="lang-switch">
+<select id="langSelect" onchange="changeLang(this.value)">
+<option value="en">English</option>
+<option value="bn">বাংলা</option>
+<option value="hi">हिन्दी</option>
+</select>
+</div>
+<div class="category-scroll" id="categoryScroll">
+<div onclick="scrollToCategory('rice')"><img src="https://via.placeholder.com/80?text=Rice"><br>Rice</div>
+<div onclick="scrollToCategory('dal')"><img src="https://via.placeholder.com/80?text=Dal"><br>Dal</div>
+<div onclick="scrollToCategory('masala')"><img src="https://via.placeholder.com/80?text=Masala"><br>Masala</div>
+<div onclick="scrollToCategory('snacks')"><img src="https://via.placeholder.com/80?text=Snacks"><br>Snacks</div>
+<div onclick="scrollToCategory('oil')"><img src="https://via.placeholder.com/80?text=Oil"><br>Oil</div>
+</div>
+<div class="product-section" id="products"></div>
+<div class="cart-drawer" id="cartDrawer">
+<h3>Your Cart</h3>
+<div id="cartItems"></div>
+<button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+</div>
+<div class="customer-form" id="customerForm">
+<h3>Customer Details</h3>
+<input type="text" id="custName" placeholder="Name">
+<input type="text" id="custPhone" placeholder="Mobile Number">
+<textarea id="custAddress" placeholder="Address"></textarea>
+</div>
+<div class="admin-login" onclick="showAdminModal()">Admin</div>
+<div class="admin-modal" id="adminModal">
+<div class="admin-modal-content">
+<h3>Admin Login</h3>
+<input type="password" id="adminPasswordInput" placeholder="Enter Password"><br>
+<button onclick="loginAdmin()">Login</button>
+</div>
+</div>
+<script>
+let adminPassword = "Rishan@2026";
+let isAdmin = false;
+let currentLang = 'en';
+let minOrder = 1000;
+let products = [
+  {id:1, name:{en:'Miniket Rice',bn:'মিনিকেট চাল',hi:'मिनिकेट चावल'}, desc:{en:'High quality rice',bn:'উচ্চ মানের চাল',hi:'उच्च गुणवत्ता वाला चावल'}, price:60, category:'rice', img:'https://via.placeholder.com/120?text=Rice', type:'Loose'},
+  {id:2, name:{en:'India Gate Basmati',bn:'ইন্ডিয়া গেট বাসমতি',hi:'इंडिया गेट बासमती'}, desc:{en:'Premium Basmati Rice',bn:'প্রিমিয়াম বাসমতি চাল',hi:'प्रीमियम बासमती चावल'}, price:120, category:'rice', img:'https://via.placeholder.com/120?text=Rice', type:'Packet'},
+  {id:3, name:{en:'Masoor Dal',bn:'মসুর ডাল',hi:'मसूर दाल'}, desc:{en:'Good quality dal',bn:'ভালো মানের ডাল',hi:'अच्छी गुणवत्ता वाली दाल'}, price:80, category:'dal', img:'https://via.placeholder.com/120?text=Dal', type:'Loose'},
+  {id:4, name:{en:'Turmeric Powder',bn:'হলুদের গুঁড়া',hi:'हल्दी पाउडर'}, desc:{en:'Spice for cooking',bn:'রান্নার জন্য মসলা',hi:'खाना पकाने के लिए मसाला'}, price:50, category:'masala', img:'https://via.placeholder.com/120?text=Masala', type:'Packet'}
+];
+let cart = [];function scrollToCategory(cat){ let elem = document.getElementById('products-'+cat); if(elem) elem.scrollIntoView({behavior:'smooth'}); }
 
+function renderProducts(){ let container = document.getElementById('products'); container.innerHTML=''; let cats = [...new Set(products.map(p=>p.category))]; cats.forEach(cat=>{ let catDiv = document.createElement('div'); catDiv.id='products-'+cat; let catHeader = document.createElement('h2'); catHeader.textContent = cat.charAt(0).toUpperCase() + cat.slice(1); catDiv.appendChild(catHeader); products.filter(p=>p.category===cat).forEach(p=>{ let div = document.createElement('div'); div.className='product'; div.innerHTML=<img src='${p.img}'><div class='product-name'>${p.name[currentLang]}</div><div class='product-desc'>${p.desc[currentLang]}</div><div class='product-price'>₹${p.price} per ${p.type==='Loose'?'kg':'pc'}</div><div class='quantity'><input type='number' min='1' max='100' value='1' id='qty-${p.id}'></div><button onclick='addToCart(${p.id})'>Add to Cart</button>; catDiv.appendChild(div); }); container.appendChild(catDiv); }); }
+
+function addToCart(id){ let p = products.find(x=>x.id===id); let qty = parseFloat(document.getElementById('qty-'+id).value); if(qty*p.price<minOrder){ alert('Minimum order ₹'+minOrder); return; } let existing = cart.find(c=>c.id===id); if(existing){ existing.qty+=qty; } else { cart.push({id:id, qty:qty}); } renderCart(); }
+
+function renderCart(){ let container = document.getElementById('cartItems'); container.innerHTML=''; cart.forEach(c=>{ let p = products.find(x=>x.id===c.id); let div = document.createElement('div'); div.className='cart-item'; div.textContent = ${p.name[currentLang]} - ${c.qty} ${p.type==='Loose'?'kg':'pc'}; container.appendChild(div); }); document.getElementById('cartDrawer').classList.add('open'); }
+
+function checkout(){ let now = new Date(); let custName = document.getElementById('custName').value || 'N/A'; let custPhone = document.getElementById('custPhone').value || 'N/A'; let custAddress = document.getElementById('custAddress').value || 'N/A';
 
